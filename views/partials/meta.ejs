@@ -1,0 +1,59 @@
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<link rel="icon" href="../../uploads/<%= accessdata.data.site_logo %>" type="image/x-icon">
+<link rel="shortcut icon" href="../../uploads/<%= accessdata.data.site_logo %>" type="image/x-icon">
+<!-- Add your CSS files here -->
+<link rel="stylesheet" type="text/css" href="../../css/vendors/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="../../css/style.css">
+<link id="color" rel="stylesheet" href="../../css/color-1.css" media="screen">
+<link rel="stylesheet" type="text/css" href="../../css/responsive.css">
+<link rel="stylesheet" href="../../css/toastr.min.css"/>
+
+<!-- Add your JS files here -->
+<script src="../../js/tostify/jquery-1.9.1.min.js"></script>
+<script src="../../js/tostify/js-toastr.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P47YT3Y75E"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P47YT3Y75E');
+</script>
+    
+    <!-- <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" defer></script>
+    <script>
+        if ('<%= role_data.role %>' == '1') {
+            var type = 'admin'
+        } else if ('<%= role_data.role %>' == '2') {
+            var type = 'customer'
+        } else if ('<%= role_data.role %>' == '3') {
+            var type = 'driver'
+        }
+        
+        let page_topic = type
+        window.OneSignal = window.OneSignal || [];
+        OneSignal.push(function() {
+          OneSignal.init({
+              appId: "<%= accessdata.data.onesignal_app_id %>",
+            });
+            OneSignal.on('subscriptionChange', function(isSubscribed) {
+                if (isSubscribed === true) {
+                    console.log('The user subscription state is now:', isSubscribed);
+                    var pathArray = window.location.pathname.split('/');
+                    OneSignal.sendTags({
+                        "Login_ID": '<%= role_data.id %>',
+                        "subscription_user_Type": page_topic,
+                    }).then(function(tagsSent) {
+                        // Callback called when tags have finished sending
+                        console.log("tagsSent", tagsSent);
+                    });
+                }
+            });
+        });
+    </script> -->

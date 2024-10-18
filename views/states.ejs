@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>States</title>
+    <%- include('./partials/meta'); -%>
+  </head>
+  <body>
+    <%- include('./partials/header_sidebar'); -%>
+
+    <div class="page-body">
+      <div class="container-fluid">
+        <div class="page-title">
+          <div class="row">
+            <div class="col-sm-6">
+              <h3>State Management</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header pb-0 d-flex justify-content-between">
+                <h4>List of States</h4>
+                <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#states_toggle">Add New State</button>
+              </div>
+
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="display" id="stateTable" aria-label="table">
+                    <thead>
+                      <tr>
+                        <th>Country Name</th>
+                        <th>State Name</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% states_data.forEach((state) => { %>
+                        <tr>
+                          <td><%= state.country_name %></td>
+                          <td><%= state.state_name %></td>
+                          <td>
+                            <ul class="action">
+                              <li class="edit">
+                                <a data-bs-toggle="modal" data-bs-target="#edit_states_toggle" data-id="<%= state.id %>" data-country="<%= state.country_id %>" data-state="<%= state.state_name %>">
+                                  <i class="icon-pencil-alt"></i>
+                                </a>
+                              </li>
+                              <li class="delete">
+                                <a href="/settings/states/delete/<%= state.id %>"><i class="icon-trash"></i></a>
+                              </li>
+                            </ul>
+                          </td>
+                        </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add State Modal -->
+      <div class="modal fade" id="states_toggle" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <form action="/settings/states" method="post">
+              <div class="modal-header">
+                <h5 class="modal-title">Add New State</h5>
+                <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
+              </div>
+
+              <div class="modal-body">
+                <div class="form-group">
+                  <label>Country Name</label>
+                  <select name="country_id" required>
+                    <% countries_data.forEach((country) => { %>
+                      <option value="<%= country.id %>"><%= country.name %></option>
+                    <% }) %>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label>State Name</label>
+                  <input type="text" name="state_name" required />
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save State</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      <%- include('./partials/footer'); -%>
+    </div>
+
+    <%- include('./partials/script'); -%>
+  </body>
+</html>

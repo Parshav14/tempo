@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../css/vendors/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="../../css/vendors/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="../../css/style.css">
+</head>
+
+<body>
+  <!-- Loader starts-->
+  <div class="loader-wrapper">
+    <div class="loader-box">
+      <div class="loader-19"></div>
+    </div>
+  </div>
+  <!-- Loader ends -->
+
+  <!-- login page start-->
+  <div class="container-fluid">
+    <div class="row m-0">
+      <div class="col-xl-12 p-0">
+        <div class="login-card py-0">
+          <div>
+            <div>
+              <a class="logo" href="/">
+                <!-- Logo placed above Skycargo -->
+                <img class="img-fluid img-75 m-r-15" src="/uploads/1685356600684Shipping 14 - 24px.png" alt="SkyCargo Logo" />
+                <!-- <h1 class="f-24 f-w-900 font-dark text-center"><%= data[0].site_title %></h1> -->
+                  <h1 class="f-24 f-w-900 font-dark pt-2 text-center">AirCario</h1>
+              </a>
+            </div>
+            <div class="login-main p-4">
+              <form class="theme-form" action="/sign_up" method="post">
+                <h4>Create your account</h4>
+                <p class="my-3">Want to register as Driver? <a href="/sign_up_driver">Click here</a></p>
+
+                <!-- Name Fields -->
+                <div class="form-group">
+                  <label class="col-form-label pt-0">Your Name</label>
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <input class="form-control" type="text" name="first_name" placeholder="First name" required>
+                    </div>
+                    <div class="col-6">
+                      <input class="form-control" type="text" name="last_name" placeholder="Last name" required>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Email Field -->
+                <div class="form-group">
+                  <label class="col-form-label">Email</label>
+                  <input class="form-control" type="email" name="email" placeholder="example@gmail.com" required>
+                </div>
+
+                <!-- Phone Number -->
+                <div class="form-group">
+                  <label class="col-form-label">Phone No.</label>
+                  <div class="row g-2">
+                    <div class="col-4">
+                      <select class="form-select" name="country_code" required>
+                        <option value="" disabled selected>Country</option>
+                        <% CountryCode.forEach((data, x) => { %>
+                          <option value="<%= data %>"><%= nameCode[x] %> <%= data %></option>
+                        <% }) %>
+                      </select>
+                    </div>
+                    <div class="col-8">
+                      <input class="form-control" type="text" name="phone_no" placeholder="Phone Number" required>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                  <label class="col-form-label">Password</label>
+                  <input class="form-control" type="password" name="password" placeholder="*********" required>
+                </div>
+
+                <!-- Address -->
+                <div class="form-group">
+                  <label class="col-form-label">Address</label>
+                  <input class="form-control" type="text" name="address" placeholder="Enter Address" required>
+                </div>
+
+                <!-- Country, State, City -->
+                <div class="row">
+                  <div class="col-6">
+                    <label class="col-form-label">Country</label>
+                    <select class="form-select" name="country" id="signup_country" required>
+                      <option value="" disabled selected>Search Country</option>
+                      <% countries.forEach((data) => { %>
+                        <option value="<%= data.id %>"><%= data.countries_name %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+                  <div class="col-6">
+                    <label class="col-form-label">State</label>
+                    <select class="form-select" name="state" id="signup_state" required>
+                      <option value="" disabled selected>Search State</option>
+                    </select>
+                  </div>
+                  <div class="col-6">
+                    <label class="col-form-label">City</label>
+                    <select class="form-select" name="city" id="signup_city" required>
+                      <option value="" disabled selected>Search City</option>
+                    </select>
+                  </div>
+                  <div class="col-6">
+                    <label class="col-form-label">Zip Code</label>
+                    <input class="form-control" type="text" name="zip_code" placeholder="Zip Code" required>
+                  </div>
+                </div>
+
+                <!-- Button -->
+                <div class="form-group mb-0">
+                  <br>
+                  <button class="btn btn-primary btn-block" type="submit">Sign Up</button>
+                </div>
+              </form>
+              <p class="mt-4 mb-0">Already have an account? <a href="/">Sign in</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- login page end-->
+
+  <script src="../../js/jquery-3.6.0.min.js"></script>
+  <script src="../../js/vendors/bootstrap.bundle.min.js"></script>
+  <script src="../../js/script.js"></script>
+
+  <script>
+
+    // Populate States based on Country selection
+  $(document).ready(function() {
+    // Populate states when country changes
+    $('#signup_country').change(function() {
+      var countryId = $(this).val();
+      $.ajax({
+        url: '/country/ajax/' + countryId,
+        type: 'GET',
+        success: function(response) {
+          var stateSelect = $('#signup_state');
+          stateSelect.empty();
+          stateSelect.append('<option value="" disabled selected>Search State</option>');
+          $.each(response.state_data, function(index, state) {
+            stateSelect.append('<option value="' + state.id + '">' + state.state_name + '</option>');
+          });
+          // Clear city dropdown
+          $('#signup_city').empty().append('<option value="" disabled selected>Search City</option>');
+        },
+        error: function(err) {
+          console.error('Error fetching states:', err);
+        }
+      });
+    });
+
+    // Populate cities when state changes
+    $('#signup_state').change(function() {
+      var stateId = $(this).val();
+      $.ajax({
+        url: '/state/ajax/' + stateId,
+        type: 'GET',
+        success: function(response) {
+          var citySelect = $('#signup_city');
+          citySelect.empty();
+          citySelect.append('<option value="" disabled selected>Search City</option>');
+          $.each(response.city_data, function(index, city) {
+            citySelect.append('<option value="' + city.id + '">' + city.city_name + '</option>');
+          });
+        },
+        error: function(err) {
+          console.error('Error fetching cities:', err);
+        }
+      });
+    });
+  });
+
+  // Hide loader when page is loaded
+  window.addEventListener('load', function() {
+    document.querySelector('.loader-wrapper').style.display = 'none';
+  });
+</script>
+</body>
+
+</html>

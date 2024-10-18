@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" type="text/css" href="/css/vendors/bootstrap.css">
+  
+  <!-- Main Style -->
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  
+  <!-- Responsive Styles -->
+  <link rel="stylesheet" type="text/css" href="/css/responsive.css">
+  <style>
+      /* Additional CSS for styling lines */
+      .line-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 20px 0; /* Adjust space as needed */
+      }
+      .line {
+          flex: 1;
+          height: 1px;
+          background-color: #ccc; /* Line color */
+          margin: 0 15px; /* Space between line and text */
+      }
+      .sign-up-text {
+          font-size: 16px; /* Adjust text size as needed */
+          font-weight: 600; /* Make it bold */
+          text-align: center; /* Center the text */
+          color: rgb(201, 197, 197); /* Set text color to light gray */
+      }
+      .create-account-link {
+          color: blue; /* Set "Create Account" text color to blue */
+      }
+      .btn {
+          display: flex; /* Use flex to center the button text */
+          justify-content: center;
+          align-items: center;
+      }
+  </style>
+</head>
+<body>
+
+   <!-- Flash Messages -->
+  <% if (success && success.length > 0) { %>
+  <div class="alert alert-success"><%= success %></div>
+<% } %>
+
+<% if (error && error.length > 0) { %>
+  <div class="alert alert-danger"><%= error %></div>
+<% } %>
+
+<% if (errors && errors.length > 0) { %>
+  <div class="alert alert-danger"><%= errors %></div>
+<% } %>
+
+
+    <!-- Loader starts -->
+    <div class="loader-wrapper">
+      <div class="loader-box">
+        <div class="loader-19"></div>
+      </div>
+    </div>
+    <!-- Loader ends -->
+
+    <!-- Login Page Start -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xl-12 p-0">    
+          <div class="login-card">
+            <div>
+              <!-- Logo with Image Above SkyCargo Text -->
+              <div class="text-center">
+                <!-- Display your logo from public/uploads -->
+                <img class="img-fluid img-75 m-r-15" src="/uploads/1685356600684Shipping 14 - 24px.png" alt="SkyCargo Logo" />
+                <!-- SkyCargo Text -->
+                <a class="logo" href="/">
+                  <h1 class="f-24 f-w-900 font-dark pt-2 text-center">AirCario</h1>
+                </a>
+              </div>
+
+              <!-- Login Form -->
+              <div class="login-main">
+  <form class="theme-form" action="/login" method="post" id="login_form">
+    <h4 class="text-center">Sign in to account</h4>
+    <p class="text-center">Enter your email & password to login</p>
+    
+    <!-- Role Selection -->
+    <div class="form-group">
+      <label class="col-form-label">Select Role</label>
+      <select class="form-control" name="role" required>
+        <option value="" disabled selected>Select your role</option>
+        <option value="admin">Admin</option>
+        <option value="customer">Customer</option>
+        <option value="driver">Driver</option>
+      </select>
+    </div>
+                  
+                  <!-- Email Field -->
+                  <div class="form-group">
+                    <label class="col-form-label">Email Address</label>
+                    <input class="form-control" type="email" name="email" placeholder="Enter E-Mail" required>
+                  </div>
+                  
+                  <!-- Password Field -->
+                  <div class="form-group">
+                    <label class="col-form-label">Password</label>
+                    <div class="form-input position-relative">
+                      <input class="form-control" type="password" name="password" placeholder="*******" required>
+                    </div>
+                  </div>
+
+                  <!-- Sign In Button -->
+                  <button class="btn btn-primary btn-block btn-square b-r-10 w-100 mt-3" type="submit">Sign in</button>
+
+                  <!-- Account Creation -->
+                  <div class="line-container">
+                      <p class="mb-0 text-center" style="color: rgb(165, 162, 162); font-size: 14px;">
+                        Don't have an account? <a class="ms-2" href="/sign_up" style="color: blue; font-size: 14px;">Create Account</a>
+                      </p>
+                  </div>
+
+                  <!-- Shipment Tracking Section -->
+                  <hr>
+                  <p class="text-center">Track your shipment</p>
+                  <a class="btn btn-light btn-square b-r-10 active txt-dark w-100 mb-3" href="/tracking">Tracking</a>
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Script to Hide Loader Once Page is Loaded -->
+    <script>
+      window.addEventListener('load', function() {
+        document.querySelector('.loader-wrapper').style.display = 'none';
+      });
+    </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../uploads/<%= general_settings_data.site_logo %>" type="image/x-icon">
+    <link rel="shortcut icon" href="../../uploads/<%= general_settings_data.site_logo %>" type="image/x-icon">
+    <title>Track Shipment</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/icofont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/themify.css">
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/flag-icon.css">
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/feather-icon.css">
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/scrollbar.css">
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../css/vendors/prism.css">
+    <link rel="stylesheet" type="text/css" href="../../css/style.css">
+    <link id="color" rel="stylesheet" href="../../css/color-1.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="../../css/responsive.css">
+  </head>
+  <body>
+    <!-- Loader starts-->
+    <div class="loader-wrapper">
+      <div class="loader-box">
+        <div class="loader-19"></div>
+      </div>
+    </div>
+    <!-- Loader ends-->
+    <!-- login page start-->
+    <div class="container-fluid dashboard-default">
+        <div class="row">
+            <div class="col-xl-12 p-0">
+                <div id="tracking_page">
+                    <div class="m-5 px-5">
+                        <div class="p-3 text-center">
+                          <img src="../../uploads/<%= general_settings_data.site_logo %>" class="pt-3" alt="image">
+                          <h1 class="f-24 f-w-900 font-dark pt-2 text-center" style="font-size: 70px;">AirCario</h1>
+                            <h5>Track your shipment</h5>
+                        </div>
+
+                        <!-- Rest of your HTML code remains the same -->
+                        <div class="card"> 
+                            <div class="card-body"> 
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <label class="form-label">Shipment Type</label>
+                                        <select class="form-select" id="shipment_type" required>
+                                            <option selected disabled value>Choose Type</option>
+                                            <option value="1">Register Packages</option>
+                                            <option value="2">Shipment</option>
+                                            <option value="3">Pickup</option>
+                                            <option value="4">Consolidated</option>
+                                        </select>
+                                        <p class="font-danger" id="shipment_type_error"></p>
+                                    </div>
+    
+                                    <div class="col-lg-6 col-sm-12">
+                                        <label class="form-label f-w-500">Tracking Id</label>
+                                        <input class="form-control" type="text" placeholder="Enter Invoice Number" id="invoice_no">
+                                        <p class="font-danger" id="invoice_no_error"></p>
+                                    </div>
+    
+                                    <div class="col-12">
+                                        <button class="btn btn-square btn-primary mt-4 pt-3 b-r-7 w-100 text-nowrap" type="submit" id="track_shipment">Track shipment</button>
+                                    </div>
+                                    <a href="/" class="p-3 text-center">Back to home</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <%- include('./partials/script'); -%>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Hide loader when page is loaded
+        document.querySelector('.loader-wrapper').style.display = 'none';
+
+        // Track shipment button click event
+        document.getElementById('track_shipment').addEventListener('click', function() {
+            var shipmentType = document.getElementById('shipment_type').value;
+            var invoiceNo = document.getElementById('invoice_no').value;
+
+            // Clear previous errors
+            document.getElementById('shipment_type_error').textContent = '';
+            document.getElementById('invoice_no_error').textContent = '';
+
+            // Validate inputs
+            if (!shipmentType) {
+                document.getElementById('shipment_type_error').textContent = 'Please select a shipment type';
+                return;
+            }
+            if (!invoiceNo) {
+                document.getElementById('invoice_no_error').textContent = 'Please enter an invoice number';
+                return;
+            }
+
+            // Show loader
+            document.querySelector('.loader-wrapper').style.display = 'block';
+
+            // Make AJAX request to track shipment
+            fetch('/tracking/ajax', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ shipment_type: shipmentType, invoice_no: invoiceNo }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide loader
+                document.querySelector('.loader-wrapper').style.display = 'none';
+
+                if (data.status === 'error') {
+                    alert(data.message);
+                } else {
+                    // Update the UI with the tracking information
+                    updateTrackingInfo(data);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Hide loader
+                document.querySelector('.loader-wrapper').style.display = 'none';
+                alert('An error occurred while tracking the shipment');
+            });
+        });
+
+        function updateTrackingInfo(data) {
+            console.log('Received data:', data); // Log the received data
+
+            // Show the hidden sections
+            document.getElementById('qwe').classList.remove('d-none');
+            document.getElementById('poi').classList.remove('d-none');
+            document.getElementById('mnb').classList.remove('d-none');
+
+            // Update sender information
+            updateElement('origin_country', data.data[0].country_name);
+            updateElement('origin_city', data.data[0].city_name);
+            updateElement('customer_name', data.data[0].customer_firstname + ' ' + data.data[0].customer_lastname);
+            updateElement('customer_address', data.data[0].customer_address);
+            updateElement('date_of_shipment', data.data[0].date);
+            updateElement('total_weight', data.data[0].total_weight);
+
+            // Update recipient information
+            updateElement('destination_country', data.data[0].client_country);
+            updateElement('destination_city', data.data[0].client_city);
+            updateElement('client_name', data.data[0].client_firstname + ' ' + data.data[0].client_lastname);
+            updateElement('destination_address', data.data[0].client_address);
+
+            // Update shipping history
+            var historyTable = document.getElementById('history_table');
+            historyTable.innerHTML = ''; // Clear existing content
+            if (data.tracking_data && data.tracking_data.length > 0) {
+                data.tracking_data.forEach(function(item) {
+                    var historyItem = document.createElement('div');
+                    historyItem.className = 'activity-line';
+                    historyItem.innerHTML = `
+                        <div class="activity-dot-primary"></div>
+                        <div class="d-flex justify-content-between w-100">
+                            <div class="d-flex flex-column">
+                                <span class="f-w-600 mb-2">${item.status_name}</span>
+                                <p class="mb-0">${item.message || ''}</p>
+                            </div>
+                            <span class="f-14">${item.date} ${item.time}</span>
+                        </div>
+                    `;
+                    historyTable.appendChild(historyItem);
+                });
+            } else {
+                historyTable.innerHTML = '<p>No tracking history available.</p>';
+            }
+        }
+
+        function updateElement(id, value) {
+            const elements = document.querySelectorAll('#' + id);
+            elements.forEach(el => {
+                el.textContent = value || 'N/A';
+            });
+        }
+    });
+    </script>
+
+
+  </body>
+</html>
